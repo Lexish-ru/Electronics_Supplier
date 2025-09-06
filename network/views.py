@@ -11,7 +11,12 @@ class NetworkNodeViewSet(viewsets.ModelViewSet):
     CRUD для звена сети (оно же поставщик для нижестоящих).
     Фильтрация по стране.
     """
-    queryset = NetworkNode.objects.select_related("supplier").prefetch_related("products").all()
+
+    queryset = (
+        NetworkNode.objects.select_related("supplier")
+        .prefetch_related("products")
+        .all()
+    )
     serializer_class = NetworkNodeSerializer
     permission_classes = [IsActiveStaff]
     filter_backends = [DjangoFilterBackend]
@@ -22,6 +27,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     Вьюсет продуктов
     """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsActiveStaff]
