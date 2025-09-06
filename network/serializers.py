@@ -21,11 +21,19 @@ class NetworkNodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = NetworkNode
         fields = [
-            "id", "name", "kind",
-            "email", "country", "city", "street", "house_number",
+            "id",
+            "name",
+            "kind",
+            "email",
+            "country",
+            "city",
+            "street",
+            "house_number",
             "products",
-            "supplier", "debt_to_supplier",
-            "created_at", "level",
+            "supplier",
+            "debt_to_supplier",
+            "created_at",
+            "level",
         ]
         read_only_fields = ["created_at", "level"]
 

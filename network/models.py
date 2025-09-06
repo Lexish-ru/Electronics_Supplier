@@ -38,13 +38,12 @@ class NetworkNode(models.Model):
     products = models.ManyToManyField(Product, blank=True, related_name="nodes")
 
     supplier = models.ForeignKey(
-        "self",
-        null=True, blank=True,
-        on_delete=models.PROTECT,
-        related_name="clients"
+        "self", null=True, blank=True, on_delete=models.PROTECT, related_name="clients"
     )
 
-    debt_to_supplier = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    debt_to_supplier = models.DecimalField(
+        max_digits=12, decimal_places=2, default=Decimal("0.00")
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -88,7 +87,9 @@ class NetworkNode(models.Model):
             depth += 1
             current = current.supplier
         if depth > 2:
-            raise ValidationError("Глубина иерархии не может превышать 3 уровня (0, 1, 2).")
+            raise ValidationError(
+                "Глубина иерархии не может превышать 3 уровня (0, 1, 2)."
+            )
 
     def clear_debt(self):
         """Обнуляет задолженность перед поставщиком."""
