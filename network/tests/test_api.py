@@ -1,4 +1,5 @@
 """API-тесты: CRUD, фильтры, запреты, health."""
+
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
@@ -10,7 +11,7 @@ pytestmark = pytest.mark.django_db
 def make_staff() -> APIClient:
     """Создаёт staff-пользователя и возвращает авторизованный клиент."""
     User = get_user_model()
-    u = User.objects.create_user(
+    User.objects.create_user(
         username="staff", password="pass", is_staff=True, is_active=True
     )
     client = APIClient()
@@ -28,12 +29,22 @@ def test_health_endpoint(client):
 def test_nodes_filter_by_country():
     """Фильтрация узлов по стране работает."""
     NetworkNode.objects.create(
-        name="Factory1", kind="factory",
-        email="f1@test.com", country="RU", city="Moscow", street="s", house_number="1"
+        name="Factory1",
+        kind="factory",
+        email="f1@test.com",
+        country="RU",
+        city="Moscow",
+        street="s",
+        house_number="1",
     )
     NetworkNode.objects.create(
-        name="Factory2", kind="factory",
-        email="f2@test.com", country="DE", city="Berlin", street="s", house_number="1"
+        name="Factory2",
+        kind="factory",
+        email="f2@test.com",
+        country="DE",
+        city="Berlin",
+        street="s",
+        house_number="1",
     )
     c = make_staff()
     resp = c.get("/api/nodes/?country=RU")
@@ -45,13 +56,23 @@ def test_nodes_filter_by_country():
 def test_cannot_update_debt_via_api():
     """Поле задолженности недоступно для изменения через API."""
     f = NetworkNode.objects.create(
-        name="Factory", kind="factory",
-        email="f@test.com", country="RU", city="Moscow", street="s", house_number="1"
+        name="Factory",
+        kind="factory",
+        email="f@test.com",
+        country="RU",
+        city="Moscow",
+        street="s",
+        house_number="1",
     )
     n = NetworkNode.objects.create(
-        name="Retail", kind="retail",
-        email="r@test.com", country="RU", city="Moscow", street="s", house_number="2",
-        supplier=f
+        name="Retail",
+        kind="retail",
+        email="r@test.com",
+        country="RU",
+        city="Moscow",
+        street="s",
+        house_number="2",
+        supplier=f,
     )
     c = make_staff()
     resp = c.patch(f"/api/nodes/{n.id}/", {"debt_to_supplier": "999.99"}, format="json")
@@ -63,15 +84,32 @@ def test_cannot_update_debt_via_api():
 def test_level_property_three_tiers():
     """Уровни 0-1-2 считаются корректно."""
     f = NetworkNode.objects.create(
-        name="F", kind="factory",
-        email="f@f", country="RU", city="M", street="s", house_number="1"
+        name="F",
+        kind="factory",
+        email="f@f",
+        country="RU",
+        city="M",
+        street="s",
+        house_number="1",
     )
     r = NetworkNode.objects.create(
-        name="R", kind="retail",
-        email="r@r", country="RU", city="M", street="s", house_number="2", supplier=f
+        name="R",
+        kind="retail",
+        email="r@r",
+        country="RU",
+        city="M",
+        street="s",
+        house_number="2",
+        supplier=f,
     )
     s = NetworkNode.objects.create(
-        name="S", kind="sole",
-        email="s@s", country="RU", city="M", street="s", house_number="3", supplier=r
+        name="S",
+        kind="sole",
+        email="s@s",
+        country="RU",
+        city="M",
+        street="s",
+        house_number="3",
+        supplier=r,
     )
     assert f.level == 0 and r.level == 1 and s.level == 2
