@@ -50,6 +50,12 @@ jobs:
           SECRET_KEY: test
           DEBUG: "1"
         run: python manage.py migrate --noinput
+
+      - name: Check migrations
+        run: |
+          python manage.py makemigrations --check --noinput
+          python manage.py showmigrations
+
       - name: Pytest + coverage
         env:
           POSTGRES_DB: electronics
@@ -59,7 +65,7 @@ jobs:
           POSTGRES_PORT: 5432
           SECRET_KEY: test
           DEBUG: "1"
-        run: pytest --cov=network --cov-report=term-missing -v
+        run: pytest --create-db --migrations --cov=network --cov-report=term-missing -v
 
   health:
     runs-on: ubuntu-latest
