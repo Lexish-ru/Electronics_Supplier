@@ -27,7 +27,6 @@ class NetworkNodeAdmin(admin.ModelAdmin):
     actions = [clear_debt_action]
     filter_horizontal = ("products",)
 
-
     fieldsets = (
         (None, {
             "fields": ("name", "kind", "supplier", "supplier_link", "level_display")
@@ -43,12 +42,10 @@ class NetworkNodeAdmin(admin.ModelAdmin):
         }),
     )
 
-
     def level_display(self, obj):
         """Отображает уровень объекта."""
         return obj.level
     level_display.short_description = "Уровень"
-
 
     def supplier_link(self, obj):
         """Ссылка на страницу поставщика."""
