@@ -23,10 +23,5 @@ done
 
 # Миграции
 python manage.py migrate --noinput
-
-# Старт через gunicorn (production-like)
-# Для локалки хватит 2 воркеров; при желании поменяй
-exec gunicorn electronics.wsgi:application \
-  --bind 0.0.0.0:8000 \
-  --workers 2 \
-  --timeout 120
+python manage.py collectstatic --noinput
+exec gunicorn electronics.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
