@@ -38,9 +38,21 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Удобно для разработки: горячая перезагрузка при пересборке образа не нужна,
-      # gunicorn перечитывать код не будет; если хочешь автоперезапуск — см. ниже вариант dev
       - .:/app
+      - static:/app/static
+
+  nginx:
+    image: nginx:1.27
+    container_name: electronics_nginx
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./static_site:/usr/share/nginx/html:ro
+      - static:/app/static
 
 volumes:
   db_data:
+  static:
